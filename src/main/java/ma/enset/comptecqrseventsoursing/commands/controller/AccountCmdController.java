@@ -2,8 +2,10 @@ package ma.enset.comptecqrseventsoursing.commands.controller;
 import lombok.AllArgsConstructor;
 import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreateAcountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreditAccountCommand;
+import ma.enset.comptecqrseventsoursing.cammon_api.commands.DebitAccountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.dto.CreateAccountRequestDTO;
 import ma.enset.comptecqrseventsoursing.cammon_api.dto.CreditAccountRequestDTO;
+import ma.enset.comptecqrseventsoursing.cammon_api.dto.DebitAccountRequestDTO;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -52,6 +54,13 @@ public class AccountCmdController {
         ));
         return respnse;
     }
-
+    @PutMapping("/debit")
+    public CompletableFuture<String> debitAccount(@RequestBody DebitAccountRequestDTO debitAccountRequestDTO){
+        CompletableFuture<String> response = commandGateway.send(new DebitAccountCommand(
+                debitAccountRequestDTO.getAccountId(), debitAccountRequestDTO.getAmount(),
+                debitAccountRequestDTO.getCurrency()
+        ));
+        return response;
+    }
 
 }

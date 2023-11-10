@@ -2,10 +2,12 @@ package ma.enset.comptecqrseventsoursing.commands.aggregate;
 
 import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreateAcountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreditAccountCommand;
+import ma.enset.comptecqrseventsoursing.cammon_api.commands.DebitAccountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.enums.AccountStatus;
 import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountActivatedEvent;
 import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountCreatedEvent;
 import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountCreditedEvent;
+import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountDebitedEvent;
 import ma.enset.comptecqrseventsoursing.cammon_api.exception.AmountNegativeException;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -79,6 +81,26 @@ public class AccountAggregate {
     public void onCreditAccount(AccountCreditedEvent event){
         this.balance += event.getAmount();
     }
+//    =========================Debit======================
+    @CommandHandler // Function de Descion
+    public void handleDebitCommand(DebitAccountCommand debitAccountCommand){
+        //Logic metie
+        if (this.balance<debitAccountCommand.getAmount()) throw  new RuntimeException("Your Solde is < then your request");
+
+        // if every thing is ok
+        AggregateLifecycle.apply(new DebitAccountCommand(
+                debitAccountCommand.getId(),
+                debitAccountCommand.getAmount(),
+                debitAccountCommand.getCurrency()
+        ));
+    }
+
+    @EventSourcingHandler // Function d'evolution
+    public void onDebitAccount(AccountDebitedEvent event){
+        // metter a jour l'application
+        this.balance -= event.getAmount();
+    }
+
 
 
 
