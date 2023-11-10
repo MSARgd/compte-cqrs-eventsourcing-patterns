@@ -1,12 +1,10 @@
 package ma.enset.comptecqrseventsoursing.cammon_api.commands;
 
-public class CreditAccountCommand extends BaseCommand<String>{
-    private double amount;
-    private String currency;
-    public CreditAccountCommand(String id) {
-        super(id);
-    }
+import lombok.Getter;
 
+public class CreditAccountCommand extends BaseCommand<String>{
+    @Getter private double amount;
+    @Getter private String currency;
     public CreditAccountCommand(String id, double amount, String currency) {
         super(id);
         this.amount = amount;
