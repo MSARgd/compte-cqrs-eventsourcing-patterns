@@ -1,24 +1,18 @@
 package ma.enset.comptecqrseventsoursing.commands.controller;
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreateAcountCommand;
+import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreditAccountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.dto.CreateAccountRequestDTO;
+import ma.enset.comptecqrseventsoursing.cammon_api.dto.CreditAccountRequestDTO;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-//import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
-
 @RestController
 @RequestMapping(path = "/commands/account")
 @AllArgsConstructor
@@ -44,9 +38,20 @@ public class AccountCmdController {
         return entity;
     }
 
-    @GetMapping("/eventStore/{accountId}")
+    @GetMapping ("/eventStore/{accountId}")
     public Stream eventStore(@PathVariable String accountId){
         DomainEventStream domainEventStream = eventStore.readEvents(accountId);
         return domainEventStream.asStream();
     }
+
+    @PutMapping ("/credit")
+    public CompletableFuture<String> creditAccount(@RequestBody CreditAccountRequestDTO request){
+        CompletableFuture<String> respnse = commandGateway.send(new CreditAccountCommand(
+                request.getAccountId(),
+                request.getAmount(), request.getCurrency()
+        ));
+        return respnse;
+    }
+
+
 }

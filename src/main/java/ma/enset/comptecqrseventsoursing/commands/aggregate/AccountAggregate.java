@@ -1,9 +1,12 @@
 package ma.enset.comptecqrseventsoursing.commands.aggregate;
 
 import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreateAcountCommand;
+import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreditAccountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.enums.AccountStatus;
 import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountActivatedEvent;
 import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountCreatedEvent;
+import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountCreditedEvent;
+import ma.enset.comptecqrseventsoursing.cammon_api.exception.AmountNegativeException;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -55,6 +58,28 @@ public class AccountAggregate {
         // pour mittee l'etat de l'application
         this.accountStatus = accountActivatedEvent.getStatus();
     }
+
+
+
+/** ===============================================+**/
+    @CommandHandler  // Decison function
+    public void handleCreditCommand(CreditAccountCommand creditAccountCommand){
+        /**==========
+         * Metier
+         */
+        if (creditAccountCommand.getAmount()<0) throw new AmountNegativeException("We can't credit with negative vaule");
+        /** If every Thing is OK  **/
+
+        AggregateLifecycle.apply(new CreditAccountCommand(
+                creditAccountCommand.getId(),creditAccountCommand.getAmount(),creditAccountCommand.getCurrency()
+        )); // Store the event in EventStore
+    }
+
+    @EventSourcingHandler //  Evolution function
+    public void onCreditAccount(AccountCreditedEvent event){
+        this.balance += event.getAmount();
+    }
+
 
 
 }
