@@ -21,3 +21,5 @@ In a CQRS (Command Query Responsibility Segregation) architecture, the read and 
 ![Image](screenes/7.png)
 ![Image](screenes/8.png)
 ![Image](screenes/9.png)
+![Image](screenes/10.png)
+![Image](screenes/11.png)
