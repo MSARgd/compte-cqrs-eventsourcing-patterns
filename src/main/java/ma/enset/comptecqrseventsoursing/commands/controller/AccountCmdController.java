@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(path = "/commands/account")
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
 public class AccountCmdController {
     public CommandGateway commandGateway;
     public EventStore eventStore;

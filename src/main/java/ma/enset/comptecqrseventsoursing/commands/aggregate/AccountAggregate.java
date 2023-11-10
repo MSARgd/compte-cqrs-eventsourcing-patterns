@@ -2,6 +2,7 @@ package ma.enset.comptecqrseventsoursing.commands.aggregate;
 
 import ma.enset.comptecqrseventsoursing.cammon_api.commands.CreateAcountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.enums.AccountStatus;
+import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountActivatedEvent;
 import ma.enset.comptecqrseventsoursing.cammon_api.eventes.AccountCreatedEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -44,7 +45,15 @@ public class AccountAggregate {
         this.balance = accountCreatedEvent.getInitialBalance();
         this.currency = accountCreatedEvent.getCurrency();
         this.accountStatus = AccountStatus.CREATED;
+        AggregateLifecycle.apply(new AccountActivatedEvent(
+           accountCreatedEvent.getId(),AccountStatus.ACTIVATED
+        ));
 
+    }
+    @EventSourcingHandler
+    private void  on(AccountActivatedEvent accountActivatedEvent){
+        // pour mittee l'etat de l'application
+        this.accountStatus = accountActivatedEvent.getStatus();
     }
 
 
