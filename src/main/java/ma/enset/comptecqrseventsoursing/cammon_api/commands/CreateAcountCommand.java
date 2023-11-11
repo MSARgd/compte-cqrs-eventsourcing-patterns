@@ -1,9 +1,7 @@
 package ma.enset.comptecqrseventsoursing.cammon_api.commands;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import ma.enset.comptecqrseventsoursing.cammon_api.enums.AccountStatus;
 
 
 public class CreateAcountCommand extends BaseCommand<String> {
@@ -13,5 +11,6 @@ public class CreateAcountCommand extends BaseCommand<String> {
         super(id);
         this.initialBalance = initialBalance;
         this.currency = currency;
+
     }
 }

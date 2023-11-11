@@ -6,6 +6,7 @@ import ma.enset.comptecqrseventsoursing.cammon_api.commands.DebitAccountCommand;
 import ma.enset.comptecqrseventsoursing.cammon_api.dto.CreateAccountRequestDTO;
 import ma.enset.comptecqrseventsoursing.cammon_api.dto.CreditAccountRequestDTO;
 import ma.enset.comptecqrseventsoursing.cammon_api.dto.DebitAccountRequestDTO;
+import ma.enset.comptecqrseventsoursing.cammon_api.enums.AccountStatus;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -26,7 +27,7 @@ public class AccountCmdController {
         CompletableFuture<String> commandResponse = commandGateway.send(new CreateAcountCommand(
                 UUID.randomUUID().toString().substring(0, 10)
                 , request.getInitialBalance(), request.getCurrency()
-        ));
+                ));
         return commandResponse;
 
     }
