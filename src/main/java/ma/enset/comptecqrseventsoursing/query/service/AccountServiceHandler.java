@@ -48,9 +48,8 @@ public class AccountServiceHandler {
         accountRepository.save(account);
 
     }
-
-    @EventHandler
     @Transactional
+    @EventHandler
     public  void onCreditAccount(AccountCreditedEvent event){
         System.out.println(event.toString());
         log.info("========================AccountCreditedEvent Recived==============");
@@ -70,9 +69,8 @@ public class AccountServiceHandler {
         accountRepository.save(account);
 
     }
-
-    @EventHandler
     @Transactional
+    @EventHandler
     public void onDebitAccount(AccountDebitedEvent event){
         System.out.println("=================");
         log.info("===============AccountDebitedEvent================");

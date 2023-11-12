@@ -77,8 +77,9 @@ public class AccountAggregate {
         )); // Store the event in EventStore
     }
 
-    @EventSourcingHandler //  Evolution function
-    public void onCreditAccount(AccountCreditedEvent event){
+    @EventSourcingHandler
+    public void onCreditAccount(AccountCreditedEvent event) {
+        // Update the state of the aggregate
         this.balance += event.getAmount();
     }
 //    =========================Debit======================
@@ -95,9 +96,9 @@ public class AccountAggregate {
         ));
     }
 
-    @EventSourcingHandler // Function d'evolution
-    public void onDebitAccount(AccountDebitedEvent event){
-        // metter a jour l'application
+    @EventSourcingHandler
+    public void onDebitAccount(AccountDebitedEvent event) {
+        // Update the state of the aggregate
         this.balance -= event.getAmount();
     }
 
